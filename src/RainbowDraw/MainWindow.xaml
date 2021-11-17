@@ -1,0 +1,144 @@
+﻿<Window x:Class="RainbowDraw.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RainbowDraw"
+        xmlns:ink="clr-namespace:System.Windows.Ink;assembly=PresentationCore"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:fw="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="RainbowPen" Height="450" Width="800"
+        AllowsTransparency="True" Background="Transparent"
+        WindowStyle="None" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded" Topmost="True" WindowState="Maximized" Icon="./IMG/RainbowPen.ico"
+        KeyDown="Window_KeyDown" Closing="Window_Closing"  KeyUp="Window_KeyUp"
+        >
+    <Border BorderBrush="White" BorderThickness="0">
+        <Grid>
+            <tb:TaskbarIcon IconSource="./IMG/RainbowPen.ico" MenuActivation="LeftOrRightClick" >
+                <tb:TaskbarIcon.ContextMenu>
+                    <ContextMenu>
+                        <!--<MenuItem Header="マウス無効化" x:Name="MouseFlgBt" Click="MouseFlgBt_Click" />-->
+                        <!--<MenuItem Header="日付表示" x:Name="DayVisibleBt" Click="DayVisibleBt_Click" >
+                            <MenuItem.Icon>
+                                <fw:ImageAwesome Icon="Check"/>
+                            </MenuItem.Icon>
+                        </MenuItem>-->
+                        <MenuItem Header="Help" Click="HelpBt_Click" >
+                            <MenuItem.Icon>
+                                <fw:ImageAwesome Icon="Question"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Toolbar Open (Ctrl + F9)" Click="ToolbarOpenBt_Click" >
+                            <MenuItem.Icon>
+                                <fw:ImageAwesome Icon="EllipsisV"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Shutdown" Click="ExitBt_Click" >
+                            <MenuItem.Icon>
+                                <fw:ImageAwesome Icon="PowerOff"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon>
+        <Canvas x:Name="mainCanvas" MouseMove="mainCanvas_MouseMove" Background="#02000000" MouseDown="mainCanvas_MouseDown" MouseUp="mainCanvas_MouseUp" KeyDown="mainCanvas_KeyDown" KeyUp="mainCanvas_KeyUp" Focusable="True">
+
+            
+            <!--<Canvas>
+                    <Grid Canvas.Left="74" Canvas.Top="68" x:Name="TestMove" MouseEnter="TextMove_MouseEnter" MouseLeave="TextMove_MouseLeave">
+                        <TextBox FontSize="50" Text="日本語" MinWidth="20" Background="#01000000" BorderThickness="0" 
+                                TextWrapping="Wrap"
+                                AcceptsReturn="True"
+                                KeyUp="TextBox_KeyUp" 
+                                TextCompositionManager.PreviewTextInputUpdate="TextBox_PreviewTextInputUpdate" 
+                                TextCompositionManager.PreviewTextInput="TextBox_PreviewTextInput"
+                                GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                LostKeyboardFocus="TextBox_LostKeyboardFocus"
+                                 IsTabStop="True"
+                                >
+                            <TextBox.Foreground>
+                                <LinearGradientBrush EndPoint="154,67" MappingMode="Absolute">
+                                    <GradientStop Color="Red" Offset="0"/>
+                                    <GradientStop Color="#FFA2FF00" Offset="1"/>
+                                </LinearGradientBrush>
+                            </TextBox.Foreground>
+                        </TextBox>
+                        <Border Background="#7F2C2C2C" Width="20" Height="20" MouseDown="TextMove_MouseDown" MouseMove="TextMove_MouseMove" MouseUp="TextMove_MouseUp" 
+                                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,-10,0,0" Visibility="Visible">
+                            <fw:ImageAwesome Icon="ArrowsAlt" Foreground="White" Width="15"/>
+                        </Border>
+                    </Grid>
+            </Canvas>-->
+            <!--<Canvas>
+                <Border Width="200" Height="200" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                        Canvas.Left="30" Canvas.Top="50" BorderThickness="5" UseLayoutRounding="False">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="1,0" EndPoint="0,1" >
+                            <GradientStop Color="#FFCD0000" Offset="0"/>
+                            <GradientStop Color="#FFFB7E00" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="1,0" EndPoint="0,1" >
+                                <GradientStop Color="#FFCD0000" Offset="0"/>
+                                <GradientStop Color="#FFFB7E00" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+            </Canvas>-->
+
+            <!--<Rectangle Height="200" Width="200" Canvas.Left="271" Canvas.Top="50" StrokeThickness="5">
+                <Rectangle.Stroke>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                        <GradientStop Color="#FFCD0000" Offset="0"/>
+                        <GradientStop Color="#FFFB7E00" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Stroke>
+                <Rectangle.Clip>
+                    <RectangleGeometry Rect="0,0,200,200"  RadiusX="5" RadiusY="5"/>
+                </Rectangle.Clip>
+            </Rectangle>-->
+
+            <!--<Canvas>
+                <Line X1="350" Y1="50" X2="100" Y2="200" StrokeThickness="20" Stroke="Red" StrokeStartLineCap="Round" StrokeEndLineCap="Flat"/>
+                <Polygon Points="-1,-1 25,10 10,25" StrokeLineJoin="Round" Visibility="Visible"
+                      Stroke="Red" StrokeThickness="5" Fill="Red"
+                      Canvas.Left="100" Canvas.Top="200" Height="30" Width="30" RenderTransformOrigin="0,0" >
+                    <Polygon.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="284.036"/>
+                            <ScaleTransform ScaleX="3.26" ScaleY="3.26"/>
+                        </TransformGroup>
+                    </Polygon.RenderTransform>
+                </Polygon>
+            </Canvas>
+
+            <Canvas>
+                <Line X1="500" Y1="300" X2="600" Y2="300" StrokeThickness="5" Stroke="Red" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                <Polygon Points="0,0 25,10 10,25" StrokeLineJoin="Round"
+                      Stroke="Red" StrokeThickness="5" Fill="Red"
+                      Canvas.Left="600" Canvas.Top="300" Height="30" Width="30" RenderTransformOrigin="0,0" >
+                    <Polygon.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="135"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Polygon.RenderTransform>
+                </Polygon>
+            </Canvas>-->
+
+            <!--<Rectangle Width="200" Height="100" Canvas.Left="20" Canvas.Top="50" Stroke="White" StrokeThickness="5" UseLayoutRounding="True" Clip=""/>-->
+        </Canvas>
+        <!--<InkCanvas x:Name="InkCn" Background="#02000000" Gesture="InkCanvas_Gesture">
+            <InkCanvas.DefaultDrawingAttributes>
+                <ink:DrawingAttributes x:Name="DrawColor" Color="White" Width="5" Height="5" />
+            </InkCanvas.DefaultDrawingAttributes>
+        </InkCanvas>-->
+            <!--<TextBox x:Name="NullTb" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-20,-20,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}"/>-->
+        </Grid>
+    </Border>
+</Window>

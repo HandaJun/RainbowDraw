@@ -1,0 +1,12 @@
+﻿UpdateUrl: "https://samek.tistory.com/8"
+HelpUrl: "https://samek.tistory.com/12"
+Size: 5
+ColorChangeTime: 30
+Magify: 1.5
+RemainMs: 3000
+RemoveFlg: false
+ColorList:
+- '#FFFFFF00'
+- '#FF00FF00'
+- '#FF0000FF'
+LastColor: Rainbow

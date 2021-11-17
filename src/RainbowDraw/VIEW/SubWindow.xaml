@@ -1,0 +1,18 @@
+﻿<Window x:Class="RainbowDraw.SubWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RainbowDraw"
+        xmlns:ink="clr-namespace:System.Windows.Ink;assembly=PresentationCore"
+        mc:Ignorable="d"
+        Title="RainbowPen" Height="450" Width="800"
+        AllowsTransparency="True" Background="Transparent"
+        WindowStyle="None" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded" Topmost="True" WindowState="Maximized" Icon="../IMG/RainbowPen.ico"
+        >
+    <Border BorderBrush="White" BorderThickness="0">
+        <Canvas x:Name="can" MouseMove="can_MouseMove" Background="#02000000" MouseDown="can_MouseDown" MouseUp="can_MouseUp">
+        </Canvas>
+    </Border>
+</Window>
