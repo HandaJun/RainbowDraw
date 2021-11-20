@@ -270,7 +270,6 @@
     <Content Include="IMG\Draw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    </Content>
     <Resource Include="IMG\protrator_b_icon.png" />
     <Content Include="IMG\protrator_b_s.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
