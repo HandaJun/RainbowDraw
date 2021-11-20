@@ -1,19 +1,10 @@
-﻿using FontAwesome.WPF;
-using RainbowDraw.LOGIC;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RainbowDraw
 {
@@ -35,9 +26,11 @@ namespace RainbowDraw
             cc.Width = image.PixelWidth;
             cc.Height = image.PixelHeight;
 
-            Grid wrap = new Grid();
-            wrap.IsHitTestVisible = false;
-            wrap.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
+            Grid wrap = new Grid
+            {
+                IsHitTestVisible = false,
+                Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0))
+            };
             wrap.Children.Add(img);
 
             cc.Content = wrap;
@@ -48,13 +41,9 @@ namespace RainbowDraw
         [MethodImpl(MethodImplOptions.Synchronized)]
         public BitmapSource GetImage(string name)
         {
-            BitmapImage bmp = null;
+            BitmapImage bmp;
             try
             {
-                //if (!Directory.Exists("Temp"))
-                //{
-                //    Directory.CreateDirectory("Temp");
-                //}
                 string tempPath = @"IMG\" + name;
                 if (!tempPath.Contains("."))
                 {

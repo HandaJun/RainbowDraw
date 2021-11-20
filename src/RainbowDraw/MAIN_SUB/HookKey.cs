@@ -1,22 +1,12 @@
 ﻿using RainbowDraw.LOGIC;
 using RainbowDraw.VIEW;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Interop;
 
 namespace RainbowDraw
 {
     public partial class MainWindow : Window
     {
-        private KeyboardHook _hook;
-
         void OnHookKeyDown(object sender, KeyEventArgs e)
         {
             IInputElement focusedControl = System.Windows.Input.Keyboard.FocusedElement;
@@ -68,13 +58,13 @@ namespace RainbowDraw
                     case Keys.Add:
                         if (Common.IsZoom)
                         {
-                            zw.magnify();
+                            zw.Magnify();
                         }
                         return;
                     case Keys.Subtract:
                         if (Common.IsZoom)
                         {
-                            zw.reduce();
+                            zw.Reduce();
                         }
                         return;
                     default:

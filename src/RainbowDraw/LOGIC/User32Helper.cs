@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace RainbowDraw.LOGIC
@@ -60,10 +57,7 @@ namespace RainbowDraw.LOGIC
                     Thread.Sleep(1000);
                 }
             }
-            catch (Exception ex)
-            {
-                //Log.Exception(ex);
-            }
+            catch { }
         }
 
         /// <summary>
@@ -93,10 +87,7 @@ namespace RainbowDraw.LOGIC
                 //プロセス取得
                 processList = (Process[])foundProcesses.ToArray(typeof(Process));
             }
-            catch (Exception ex)
-            {
-                //Log.Exception(ex);
-            }
+            catch { }
 
             //結果を返す
             return processList;
@@ -165,8 +156,7 @@ namespace RainbowDraw.LOGIC
             }
 
             //プロセスのIDを取得する
-            int processId;
-            GetWindowThreadProcessId(hWnd, out processId);
+            GetWindowThreadProcessId(hWnd, out int processId);
             //今まで見つかったプロセスでは無いことを確認する
             if (!foundProcessIds.Contains(processId))
             {
@@ -221,10 +211,7 @@ namespace RainbowDraw.LOGIC
                 var parentId = new PerformanceCounter("Process", "Creating Process ID", indexedProcessName);
                 proc = Process.GetProcessById((int)parentId.NextValue());
             }
-            catch (Exception ex)
-            {
-                //Log.Exception(ex);
-            }
+            catch { }
             return proc;
         }
 
@@ -270,13 +257,11 @@ namespace RainbowDraw.LOGIC
             IntPtr dummy = IntPtr.Zero;
             IntPtr timeout = IntPtr.Zero;
 
-            bool isSuccess = false;
 
-            int processId;
             // フォアグラウンドウィンドウを作成したスレッドのIDを取得
-            int foregroundID = GetWindowThreadProcessId(GetForegroundWindow(), out processId);
+            int foregroundID = GetWindowThreadProcessId(GetForegroundWindow(), out _);
             // 目的のウィンドウを作成したスレッドのIDを取得
-            int targetID = GetWindowThreadProcessId(handle, out processId);
+            int targetID = GetWindowThreadProcessId(handle, out _);
 
             // スレッドのインプット状態を結び付ける
             AttachThreadInput(targetID, foregroundID, true);
@@ -286,6 +271,8 @@ namespace RainbowDraw.LOGIC
             // ウィンドウの切り替え時間を 0ms にする
             SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, dummy, SPIF_SENDCHANGE);
 
+
+            bool isSuccess;
             // ウィンドウをフォアグラウンドに持ってくる
             if (IsForeGround)
             {

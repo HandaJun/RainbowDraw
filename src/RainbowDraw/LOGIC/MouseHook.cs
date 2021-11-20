@@ -1,10 +1,8 @@
 ﻿using RainbowDraw.VIEW;
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows;
-using System.Windows.Shell;
 using System.Windows.Threading;
 
 
@@ -55,7 +53,7 @@ namespace RainbowDraw.LOGIC
             return new Point(nativePoint.X, nativePoint.Y);
         }
 
-        private Dispatcher dispatcher;
+        private readonly Dispatcher dispatcher;
 
         public static Timer timer = new Timer(500);
         public static Timer EmphasizeMoveTimer = new Timer(10);
@@ -63,16 +61,14 @@ namespace RainbowDraw.LOGIC
         public MouseHook()
         {
             dispatcher = Application.Current.MainWindow.Dispatcher;
-            //timer.Elapsed += Timer_Elapsed;
             EmphasizeMoveTimer.Elapsed += EmphasizeMoveTimer_Elapsed;
-            //EmphasizeMoveTimer.Start();
-            //timer.Start();
         }
 
         void EmphasizeMoveTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Point current = GetCurrentMousePosition();
-            Common.Invoke(() => { 
+            Common.Invoke(() =>
+            {
                 var w = EmphasizeWindow.GetInstance();
                 if (w.IsVisible)
                 {
@@ -80,77 +76,6 @@ namespace RainbowDraw.LOGIC
                     w.Top = current.Y - (w.Height / 2);
                 }
             });
-        }
-
-        void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Point current = GetCurrentMousePosition();
-
-            //if (current.X > stickyWindowMaxWidth)
-            //{
-            //    try
-            //    {
-            //        Common.Invoke(() => {
-            //            if (StickyWindow.GetInstance().getWidth() != 0)
-            //            {
-            //                if (GetAsyncKeyState((UInt16)VirtualKey.VK_LBUTTON) == 0)
-            //                {
-            //                    StickyWindow.GetInstance().Fold();
-            //                }
-            //            }
-            //        });
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Debug.WriteLine(ex.Message);
-            //    }
-            //}
-            //else if (current.X <= stickyWindowMaxWidth && current.X > 3 && current.Y > 300)
-            //{
-            //    try
-            //    {
-            //        Common.Invoke(() => {
-            //            if (StickyWindow.GetInstance().getWidth() != 0)
-            //            {
-            //                if (StickyManager.GetMaxHeight() < current.Y)
-            //                {
-            //                    if (GetAsyncKeyState((UInt16)VirtualKey.VK_LBUTTON) == 0)
-            //                    {
-            //                        StickyWindow.GetInstance().Fold();
-            //                    }
-            //                }
-            //            }
-            //        });
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Debug.WriteLine(ex.Message);
-            //    }
-            //}
-            //else if (current.X <= stickyWindowMaxWidth && current.X > 3 && current.Y < 300)
-            //{
-
-            //}
-            //else if (current.X < 0)
-            //{
-            //    try
-            //    {
-            //        Common.Invoke(() => {
-            //            if (StickyWindow.GetInstance().getWidth() != 0)
-            //            {
-            //                if (GetAsyncKeyState((UInt16)VirtualKey.VK_LBUTTON) == 0)
-            //                {
-            //                    StickyWindow.GetInstance().Fold();
-            //                }
-            //            }
-            //        });
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Debug.WriteLine(ex.Message);
-            //    }
-            //}
-            //this.CurrentPosition = current;
         }
 
         public Point CurrentPosition

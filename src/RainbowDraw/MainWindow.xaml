@@ -43,7 +43,7 @@
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
             </tb:TaskbarIcon>
-        <Canvas x:Name="mainCanvas" MouseMove="mainCanvas_MouseMove" Background="#02000000" MouseDown="mainCanvas_MouseDown" MouseUp="mainCanvas_MouseUp" KeyDown="mainCanvas_KeyDown" KeyUp="mainCanvas_KeyUp" Focusable="True">
+        <Canvas x:Name="mainCanvas" MouseMove="MainCanvas_MouseMove" Background="#02000000" MouseDown="MainCanvas_MouseDown" MouseUp="MainCanvas_MouseUp" KeyDown="MainCanvas_KeyDown" KeyUp="MainCanvas_KeyUp" Focusable="True">
 
             
             <!--<Canvas>

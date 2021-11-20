@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RainbowDraw.LOGIC
 {
-    
+
 
     // Magnifier Window Styles
     internal enum MagnifierStyle : int
@@ -295,7 +291,7 @@ namespace RainbowDraw.LOGIC
         HWND_TOPMOST = -1,
 
         HWND_NOTOPMOST = -2,
-}
+    }
 
     /// <summary>
     ///Common window styles

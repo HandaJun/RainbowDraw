@@ -1,15 +1,9 @@
 ﻿using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace RainbowDraw
@@ -38,7 +32,7 @@ namespace RainbowDraw
                 if (Update())
                 {
                     var result = MessageBox.Show("A new version has been registered.\nWould you like to confirm?", "Update", MessageBoxButton.YesNo);
-                    if(result == MessageBoxResult.Yes)
+                    if (result == MessageBoxResult.Yes)
                     {
                         System.Diagnostics.Process.Start(App.Setting.HelpUrl);
                     }
@@ -67,53 +61,56 @@ namespace RainbowDraw
 
         public bool Update()
         {
-            return false;
-            WebRequest wrGETURL = WebRequest.Create(App.Setting.UpdateUrl);
-            string sLine = String.Empty;
-            StringBuilder htmlSb = new StringBuilder();
-            using (StreamReader reader = new StreamReader(wrGETURL.GetResponse().GetResponseStream()))
+            try
             {
-                while (sLine != null)
+                WebRequest wrGETURL = WebRequest.Create(App.Setting.UpdateUrl);
+                string sLine = String.Empty;
+                StringBuilder htmlSb = new StringBuilder();
+                using (StreamReader reader = new StreamReader(wrGETURL.GetResponse().GetResponseStream()))
                 {
-                    sLine = reader.ReadLine();
-
-                    if (sLine != null)
+                    while (sLine != null)
                     {
-                        htmlSb.Append(sLine);
-                    }
-                }
-            }
+                        sLine = reader.ReadLine();
 
-            string html = htmlSb.ToString();
-            HtmlParser hp = new HtmlParser(html);
-            while(true)
-            {
-                hp.ParseNext("div", out HtmlTag ht);
-                if(ht == null)
-                {
-                    break;
-                }
-                var attrList = ht.Attributes;
-                if (attrList.ContainsKey("id"))
-                {
-                    if (attrList["id"] == "RainbowDraw")
-                    {
-                        if (attrList.ContainsKey("data-v"))
+                        if (sLine != null)
                         {
-                            Version newVer = new Version(attrList["data-v"]);
-                            Version thisVer = Assembly.GetExecutingAssembly().GetName().Version;
-
-                            var result = newVer.CompareTo(thisVer);
-                            if (result > 0)
-                                return true;
-                            else
-                                return false;
-
+                            htmlSb.Append(sLine);
                         }
-                        return false;
+                    }
+                }
+
+                string html = htmlSb.ToString();
+                HtmlParser hp = new HtmlParser(html);
+                while (true)
+                {
+                    hp.ParseNext("div", out HtmlTag ht);
+                    if (ht == null)
+                    {
+                        break;
+                    }
+                    var attrList = ht.Attributes;
+                    if (attrList.ContainsKey("id"))
+                    {
+                        if (attrList["id"] == "RainbowDraw")
+                        {
+                            if (attrList.ContainsKey("data-v"))
+                            {
+                                Version newVer = new Version(attrList["data-v"]);
+                                Version thisVer = Assembly.GetExecutingAssembly().GetName().Version;
+
+                                var result = newVer.CompareTo(thisVer);
+                                if (result > 0)
+                                    return true;
+                                else
+                                    return false;
+
+                            }
+                            return false;
+                        }
                     }
                 }
             }
+            catch { }
             return false;
         }
     }

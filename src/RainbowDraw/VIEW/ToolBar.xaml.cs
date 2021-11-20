@@ -1,25 +1,15 @@
-﻿using ColorPickerLib.Controls;
-using FontAwesome.WPF;
+﻿using FontAwesome.WPF;
 using RainbowDraw.LOGIC;
 using RainbowDraw.VIEW;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RainbowDraw
 {
@@ -60,12 +50,10 @@ namespace RainbowDraw
     {
         public static ToolBar _instance = new ToolBar();
         bool IsStartup = false;
-        bool IsLoaded = false;
 
         private ToolBar()
         {
             InitializeComponent();
-            //ShowInTaskbar = false;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -87,7 +75,6 @@ namespace RainbowDraw
                 AddColorGrid(Common.StringToMediaColor(color), true);
             }
             ColorChange(App.Setting.LastColor);
-            IsLoaded = true;
         }
 
         public override void OnApplyTemplate()
@@ -143,10 +130,12 @@ namespace RainbowDraw
             var accentPtr = Marshal.AllocHGlobal(accentStructSize);
             Marshal.StructureToPtr(accent, accentPtr, false);
 
-            var data = new WindowCompositionAttributeData();
-            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
-            data.SizeOfData = accentStructSize;
-            data.Data = accentPtr;
+            var data = new WindowCompositionAttributeData
+            {
+                Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY,
+                SizeOfData = accentStructSize,
+                Data = accentPtr
+            };
 
             SetWindowCompositionAttribute(windowHelper.Handle, ref data);
 
@@ -155,9 +144,9 @@ namespace RainbowDraw
 
         //SolidColorBrush SelectBrush = new SolidColorBrush(Color.FromArgb(204, 0, 191, 139));
 
-        LinearGradientBrush SelectBrush = new LinearGradientBrush(Color.FromRgb(255, 93, 0), Color.FromRgb(93, 255, 0), new Point(0, 0), new Point(1, 1));
-        LinearGradientBrush EnterBrush = new LinearGradientBrush(Color.FromArgb(255, 160, 60, 0), Color.FromArgb(255, 60, 160, 0), new Point(0, 0), new Point(1, 1));
-        SolidColorBrush UnSelectBrush = new SolidColorBrush(Color.FromArgb(204, 51, 51, 51));
+        readonly LinearGradientBrush SelectBrush = new LinearGradientBrush(Color.FromRgb(255, 93, 0), Color.FromRgb(93, 255, 0), new Point(0, 0), new Point(1, 1));
+        readonly LinearGradientBrush EnterBrush = new LinearGradientBrush(Color.FromArgb(255, 160, 60, 0), Color.FromArgb(255, 60, 160, 0), new Point(0, 0), new Point(1, 1));
+        readonly SolidColorBrush UnSelectBrush = new SolidColorBrush(Color.FromArgb(204, 51, 51, 51));
         public void RemoveMode(DRAW_MODE mode = DRAW_MODE.NULL)
         {
             switch (mode)
@@ -421,8 +410,7 @@ namespace RainbowDraw
 
         private void MenuBt_MouseEnter(object sender, MouseEventArgs e)
         {
-            Border bd = sender as Border;
-            if (bd != null && (bd.Tag == null || bd.Tag.ToString() == ""))
+            if (sender is Border bd && (bd.Tag == null || bd.Tag.ToString() == ""))
             {
                 bd.Background = EnterBrush;
             }
@@ -430,8 +418,7 @@ namespace RainbowDraw
 
         private void MenuBt_MouseLeave(object sender, MouseEventArgs e)
         {
-            Border bd = sender as Border;
-            if (bd != null && (bd.Tag == null || bd.Tag.ToString() == ""))
+            if (sender is Border bd && (bd.Tag == null || bd.Tag.ToString() == ""))
             {
                 bd.Background = UnSelectBrush;
             }
@@ -547,7 +534,7 @@ namespace RainbowDraw
             FadeCb.IsChecked = App.Setting.RemoveFlg;
         }
 
-        LinearGradientBrush RainbowBrush = new LinearGradientBrush(
+        readonly LinearGradientBrush RainbowBrush = new LinearGradientBrush(
             new GradientStopCollection() {
                 new GradientStop(Color.FromArgb(255, 255, 0, 0), 0.15),
                 new GradientStop(Color.FromArgb(255, 255, 255, 0), 0.3),
@@ -598,10 +585,14 @@ namespace RainbowDraw
         {
         }
 
-        Color lastChangeColor = Colors.White;
+        private static readonly Color white = Colors.White;
+        private Color lastChangeColor = white;
+
+        public Color LastChangeColor { get => lastChangeColor; set => lastChangeColor = value; }
+
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            lastChangeColor = (Color)e.NewValue;
+            LastChangeColor = (Color)e.NewValue;
         }
 
         private void AddColorBt_Click(object sender, RoutedEventArgs e)
@@ -629,38 +620,48 @@ namespace RainbowDraw
                 return;
             }
 
-            Grid gd = new Grid();
-            gd.Cursor = Cursors.Hand;
+            Grid gd = new Grid
+            {
+                Cursor = Cursors.Hand
+            };
 
-            Grid mainGd = new Grid();
+            Grid mainGd = new Grid
+            {
+                Width = 30,
+                Height = 30,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0),
+                Tag = colorStr
+            };
             mainGd.MouseDown += ColorChange_MouseDown;
-            mainGd.Width = 30;
-            mainGd.Height = 30;
-            mainGd.HorizontalAlignment = HorizontalAlignment.Left;
-            mainGd.Margin = new Thickness(0);
-            mainGd.Tag = colorStr;
 
-            Border mainBd = new Border();
-            mainBd.Margin = new Thickness(2);
-            mainBd.CornerRadius = new CornerRadius(30);
-            mainBd.Background = new SolidColorBrush(color);
+            Border mainBd = new Border
+            {
+                Margin = new Thickness(2),
+                CornerRadius = new CornerRadius(30),
+                Background = new SolidColorBrush(color)
+            };
             mainGd.Children.Add(mainBd);
 
-            Border closeBd = new Border();
+            Border closeBd = new Border
+            {
+                Background = new SolidColorBrush(Color.FromArgb(255, 30, 30, 30)),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top,
+                Width = 12,
+                Height = 12,
+                CornerRadius = new CornerRadius(15),
+                Cursor = Cursors.Hand,
+                Tag = colorStr
+            };
             closeBd.MouseDown += ColorRemove_MouseDown;
-            closeBd.Background = new SolidColorBrush(Color.FromArgb(255, 30, 30, 30));
-            closeBd.HorizontalAlignment = HorizontalAlignment.Right;
-            closeBd.VerticalAlignment = VerticalAlignment.Top;
-            closeBd.Width = 12;
-            closeBd.Height = 12;
-            closeBd.CornerRadius = new CornerRadius(15);
-            closeBd.Cursor = Cursors.Hand;
-            closeBd.Tag = colorStr;
 
-            ImageAwesome closeIa = new ImageAwesome();
-            closeIa.Icon = FontAwesomeIcon.Close;
-            closeIa.Margin = new Thickness(3);
-            closeIa.Foreground = Brushes.White;
+            ImageAwesome closeIa = new ImageAwesome
+            {
+                Icon = FontAwesomeIcon.Close,
+                Margin = new Thickness(3),
+                Foreground = Brushes.White
+            };
             closeBd.Child = closeIa;
 
             gd.Children.Add(mainGd);

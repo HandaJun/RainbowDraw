@@ -1,12 +1,6 @@
 ﻿using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -25,20 +19,24 @@ namespace RainbowDraw
         public void CreateLine()
         {
             _rad5 = DegreeToRadian(2);
-            line = new Line();
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1, 1);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 1)
+            };
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 0));
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 1));
-            line.Stroke = lg;
-            line.X1 = startX;
-            line.Y1 = startY;
-            line.X2 = startX;
-            line.Y2 = startY;
-            line.UseLayoutRounding = true;
-            line.HorizontalAlignment = HorizontalAlignment.Left;
-            line.VerticalAlignment = VerticalAlignment.Top;
+            line = new Line
+            {
+                Stroke = lg,
+                X1 = startX,
+                Y1 = startY,
+                X2 = startX,
+                Y2 = startY,
+                UseLayoutRounding = true,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top
+            };
             double thickness = Common.curLineSize;
             if (Common.nowMode == DRAW_MODE.HIGHLIGHTER_LINE)
             {
@@ -55,24 +53,11 @@ namespace RainbowDraw
             nowCanvas.Children.Add(line);
         }
 
-        private bool IsShiftKeyPressed
-        {
-            get
-            {
-                return (Keyboard.GetKeyStates(Key.LeftShift) & KeyStates.Down) == KeyStates.Down ||
-                     (Keyboard.GetKeyStates(Key.RightShift) & KeyStates.Down) == KeyStates.Down;
-            }
-        }
-
         public void RePaintLine(Point p)
         {
             double distX = Math.Abs(p.X - startX);
             double distY = Math.Abs(p.Y - startY);
-            //line.X2 = p.X;
-            //line.Y2 = p.Y;
 
-            //Debug.WriteLine(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
-    
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             {
                 _rad5 = DegreeToRadian(45);

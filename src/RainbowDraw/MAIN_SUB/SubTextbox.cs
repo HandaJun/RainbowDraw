@@ -1,16 +1,11 @@
 ﻿using FontAwesome.WPF;
 using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace RainbowDraw
 {
@@ -24,26 +19,30 @@ namespace RainbowDraw
             Canvas.SetLeft(gd, startX);
             Canvas.SetTop(gd, startY);
 
-            textBox = new TextBox();
-            textBox.FontSize = Common.curLineSize * 10;
-            textBox.MinWidth = 30;
-            textBox.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
-            textBox.BorderThickness = new Thickness(2);
-            textBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+            textBox = new TextBox
+            {
+                FontSize = Common.curLineSize * 10,
+                MinWidth = 30,
+                Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0)),
+                BorderThickness = new Thickness(2),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150)),
+                TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true,
+                IsTabStop = true
+            };
             Canvas.SetLeft(textBox, startX);
             Canvas.SetTop(textBox, startY);
-            textBox.TextWrapping = TextWrapping.Wrap;
-            textBox.AcceptsReturn = true;
             textBox.KeyUp += TextBox_KeyUp;
             TextCompositionManager.AddPreviewTextInputUpdateHandler(textBox, TextBox_PreviewTextInputUpdate);
             TextCompositionManager.AddPreviewTextInputHandler(textBox, TextBox_PreviewTextInput);
             textBox.GotKeyboardFocus += TextBox_GotKeyboardFocus;
             textBox.LostKeyboardFocus += TextBox_LostKeyboardFocus;
-            textBox.IsTabStop = true;
 
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.MappingMode = BrushMappingMode.Absolute;
-            lg.EndPoint = new Point(20, 0);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                MappingMode = BrushMappingMode.Absolute,
+                EndPoint = new Point(20, 0)
+            };
             Color c = ((SolidColorBrush)curColor).Color;
             lg.GradientStops.Add(new GradientStop(c, 0));
             lg.GradientStops.Add(new GradientStop(c, 1));
@@ -53,21 +52,25 @@ namespace RainbowDraw
             //nowCanvas.Children.Add(textBox);
             gd.Children.Add(textBox);
 
-            Border bd = new Border();
-            bd.Background = new SolidColorBrush(Color.FromArgb(130, 44, 44, 44));
-            bd.Width = 20;
-            bd.Height = 20;
+            Border bd = new Border
+            {
+                Background = new SolidColorBrush(Color.FromArgb(130, 44, 44, 44)),
+                Width = 20,
+                Height = 20,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(-10, -10, 0, 0),
+                Visibility = Visibility.Hidden
+            };
             bd.MouseDown += TextMove_MouseDown;
             bd.MouseMove += TextMove_MouseMove;
             bd.MouseUp += TextMove_MouseUp;
-            bd.HorizontalAlignment = HorizontalAlignment.Left;
-            bd.VerticalAlignment = VerticalAlignment.Top;
-            bd.Margin = new Thickness(-10, -10, 0, 0);
-            bd.Visibility = Visibility.Hidden;
-            ImageAwesome ia = new ImageAwesome();
-            ia.Icon = FontAwesomeIcon.ArrowsAlt;
-            ia.Width = 15;
-            ia.Foreground = Brushes.White;
+            ImageAwesome ia = new ImageAwesome
+            {
+                Icon = FontAwesomeIcon.ArrowsAlt,
+                Width = 15,
+                Foreground = Brushes.White
+            };
             bd.Child = ia;
             gd.Children.Add(bd);
 
@@ -125,9 +128,11 @@ namespace RainbowDraw
                 Brush startBrush = Rainbow(startProgress);
                 //Color c = (Color)ColorConverter.ConvertFromString(tb.Tag.ToString()); 
                 Color startColor = ((SolidColorBrush)startBrush).Color;
-                LinearGradientBrush lg = new LinearGradientBrush();
-                lg.MappingMode = BrushMappingMode.Absolute;
-                lg.EndPoint = new Point(tb.ActualWidth, tb.ActualHeight);
+                LinearGradientBrush lg = new LinearGradientBrush
+                {
+                    MappingMode = BrushMappingMode.Absolute,
+                    EndPoint = new Point(tb.ActualWidth, tb.ActualHeight)
+                };
                 lg.GradientStops.Add(new GradientStop(startColor, 0));
                 double addProg = Math.Min((float)tb.ActualWidth / 5000f, 0.2f);
                 addProg = Math.Max(addProg, 0.06f);
@@ -140,8 +145,8 @@ namespace RainbowDraw
 
         public void FontSizeChange(TextBox tb, bool upFlg)
         {
-            double changeSize = 1;
             double fontSize = tb.FontSize;
+            double changeSize;
             if (fontSize < 20)
             {
                 changeSize = 2;
@@ -181,8 +186,7 @@ namespace RainbowDraw
 
         private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            if (tb != null)
+            if (sender is TextBox tb)
             {
                 tb.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
             }
@@ -190,19 +194,16 @@ namespace RainbowDraw
 
         private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            if (tb != null)
+            if (sender is TextBox tb)
             {
                 tb.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 150, 150, 150));
-                if (tb.Text == "")
+                if (string.IsNullOrEmpty(tb.Text))
                 {
                     Grid gd = VisualTreeHelper.GetParent(tb) as Grid;
                     Canvas cv = VisualTreeHelper.GetParent(gd) as Canvas;
                     string id = cv.Tag.ToString();
-                    //Common.CanvasDic.Remove(id);
                     mainCanvas.Children.Remove((System.Windows.Controls.Canvas)mainCanvas.FindName(id));
                 }
-
                 SetGradientColor(tb);
             }
         }

@@ -12,7 +12,7 @@
         Loaded="Window_Loaded" Topmost="True" WindowState="Maximized" Icon="../IMG/RainbowPen.ico"
         >
     <Border BorderBrush="White" BorderThickness="0">
-        <Canvas x:Name="can" MouseMove="can_MouseMove" Background="#02000000" MouseDown="can_MouseDown" MouseUp="can_MouseUp">
+        <Canvas x:Name="can" MouseMove="Can_MouseMove" Background="#02000000" MouseDown="Can_MouseDown" MouseUp="Can_MouseUp">
         </Canvas>
     </Border>
 </Window>

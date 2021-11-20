@@ -162,9 +162,11 @@ namespace RainbowDraw
             if (name == "*" || String.Compare(s, name, true) == 0)
             {
                 // Yes, create new tag object
-                tag = new HtmlTag();
-                tag.Name = s;
-                tag.Attributes = new Dictionary<string, string>();
+                tag = new HtmlTag
+                {
+                    Name = s,
+                    Attributes = new Dictionary<string, string>()
+                };
                 requested = true;
             }
 
@@ -207,15 +209,15 @@ namespace RainbowDraw
                 }
             }
             int tempPos = _pos;
-            if(Peek() != '<')
+            if (Peek() != '<')
             {
                 int start = _pos + 1;
                 MoveToNextTag();
                 int end = _pos;
                 string v = _html.Substring(start, end - start).Trim();
-                if(v != "" && v != "\n")
+                if (v != "" && v != "\n")
                 {
-                    if(tag != null)
+                    if (tag != null)
                     {
                         tag.Attributes.Add("value", v);
                     }

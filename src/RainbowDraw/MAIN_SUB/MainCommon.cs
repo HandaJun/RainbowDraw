@@ -1,15 +1,10 @@
-﻿using FontAwesome.WPF;
-using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Win32.SafeHandles;
 using RainbowDraw.LOGIC;
 using RainbowDraw.VIEW;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -93,10 +88,10 @@ namespace RainbowDraw
         public void SetCursor(string mode)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Directory.GetParent(Assembly.GetExecutingAssembly().Location) + @"\IMG\" + mode + ".png");
-            System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bitmap);
+            _ = System.Drawing.Graphics.FromImage(bitmap);
             IntPtr handle = bitmap.GetHicon();
             SafeFileHandle panHandle = new SafeFileHandle(handle, false);
-            this.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
+            this.Cursor = CursorInteropHelper.Create(panHandle);
         }
 
         public void SetMouseFlg()
@@ -129,9 +124,10 @@ namespace RainbowDraw
             Common.rainbowProgress += ascending;
             if (Common.rainbowProgress > 1f)
             {
-                Common.rainbowProgress = Common.rainbowProgress - 1f;
+                Common.rainbowProgress -= 1f;
             }
-            this.Dispatcher.Invoke(() => {
+            this.Dispatcher.Invoke(() =>
+            {
                 rtn = Rainbow(Common.rainbowProgress);
                 curColor = rtn;
             });
@@ -180,10 +176,10 @@ namespace RainbowDraw
         public float GetProgress(Brush br)
         {
             float div = 0f;
-            float ascending = 0f;
             byte r = ((Color)br.GetValue(SolidColorBrush.ColorProperty)).R;
             byte g = ((Color)br.GetValue(SolidColorBrush.ColorProperty)).G;
             byte b = ((Color)br.GetValue(SolidColorBrush.ColorProperty)).B;
+            float ascending;
             if (r == 255 && b == 0)
             {
                 div += 0;
@@ -284,10 +280,7 @@ namespace RainbowDraw
         }
 
         public static ZoomWindow zw = new ZoomWindow();
-        IntPtr toolBarHandle = new IntPtr(0);
-        Process process;
-
-        private const int SW_MAXIMIZE = 3;
+        private static readonly IntPtr intPtr = new IntPtr(0);
         private const int SW_MINIMIZE = 6;
         [DllImport("user32.dll", EntryPoint = "FindWindow")]
         public static extern IntPtr FindWindowByCaption(IntPtr ZeroOnly, string lpWindowName);
@@ -329,5 +322,7 @@ namespace RainbowDraw
         const int WS_EX_LAYERED = 0x80000;
         const int WS_EX_TRANSPARENT = 0x20;
         const int WS_EX_ACCEPTFILES = 0x10;
+
+        public IntPtr ToolBarHandle { get; } = intPtr;
     }
 }

@@ -1,9 +1,5 @@
 ﻿using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,21 +9,15 @@ namespace RainbowDraw
 {
     public partial class MainWindow : Window
     {
-        long elliNum = 0;
-        Dictionary<string, List<Point>> elliList = new Dictionary<string, List<Point>>();
-
         public void InsertElli(Point cp, Brush color, bool save = true)
         {
-            if(cp.X <= 10 || cp.Y <= 10 || startX <= 10 || startY <= 10)
+            if (cp.X <= 10 || cp.Y <= 10 || startX <= 10 || startY <= 10)
             {
                 return;
             }
 
             if (save && Common.rainbowFlg)
             {
-                List<Point> pointList = new List<Point>();
-                pointList.Add(cp);
-
                 int interval = 1;
                 if (Common.curLineSize < 4)
                 {
@@ -74,13 +64,9 @@ namespace RainbowDraw
                             }
                         }
                         Point tempPoint = new Point(tempX, tempY);
-                        //pointList.Add(tempPoint);
                         InsertElli(tempPoint, color, false);
                     }
                 }
-
-                //elliList.Add(elliNum.ToString(), pointList);
-
                 startX = cp.X;
                 startY = cp.Y;
             }
@@ -98,12 +84,14 @@ namespace RainbowDraw
             {
                 thickness = thickness * 2 + 3;
 
-                Rectangle rt = new Rectangle();
-                rt.Height = thickness;
-                rt.Width = thickness;
-                rt.StrokeThickness = thickness;
-                rt.Stroke = b.Clone();
-                rt.Fill = b.Clone();
+                Rectangle rt = new Rectangle
+                {
+                    Height = thickness,
+                    Width = thickness,
+                    StrokeThickness = thickness,
+                    Stroke = b.Clone(),
+                    Fill = b.Clone()
+                };
                 double left = p.X - (thickness / 3);
                 double top = p.Y - (thickness / 2);
                 Canvas.SetLeft(rt, left);
@@ -127,12 +115,14 @@ namespace RainbowDraw
             }
             else
             {
-                Ellipse el = new Ellipse();
-                el.Height = thickness;
-                el.Width = thickness;
-                el.StrokeThickness = thickness;
-                el.Stroke = b.Clone();
-                el.Fill = b.Clone();
+                Ellipse el = new Ellipse
+                {
+                    Height = thickness,
+                    Width = thickness,
+                    StrokeThickness = thickness,
+                    Stroke = b.Clone(),
+                    Fill = b.Clone()
+                };
                 double left = p.X - (thickness / 2);
                 double top = p.Y - (thickness / 2);
                 Canvas.SetLeft(el, left);
@@ -155,8 +145,8 @@ namespace RainbowDraw
                 }
             }
 
-            
-            
+
+
 
         }
     }

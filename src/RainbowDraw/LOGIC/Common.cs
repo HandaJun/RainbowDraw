@@ -14,9 +14,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -53,7 +51,8 @@ namespace RainbowDraw.LOGIC
 
         public static void Invoke(Action act)
         {
-            MainWindow.GetInstance().Dispatcher.Invoke(() => {
+            MainWindow.GetInstance().Dispatcher.Invoke(() =>
+            {
                 try
                 {
                     act();
@@ -112,10 +111,6 @@ namespace RainbowDraw.LOGIC
                     }
                     else
                     {
-                        //bounds2.X = (double)bounds2.X >= Common.ScreenRectInfo[index].X ? checked((int)Math.Round(unchecked((double)bounds2.X / m11))) : checked((int)Math.Round(unchecked((double)checked(-bounds2.Width) / m11)));
-                        //bounds2.Y = (double)bounds2.Y >= Common.ScreenRectInfo[index].Y ? checked((int)Math.Round(unchecked((double)bounds2.Y / m11))) : checked((int)Math.Round(unchecked((double)checked(-bounds2.Height) / m11)));
-                        //bounds2.Width = checked((int)Math.Round(unchecked((double)bounds2.Width / m11)));
-                        //bounds2.Height = checked((int)Math.Round(unchecked((double)bounds2.Height / m11)));
                         Common.ScreenRectInfo[index] = new Rect((double)bounds2.X, (double)bounds2.Y, (double)bounds2.Width, (double)bounds2.Height);
                     }
                     checked { ++index; }
@@ -125,7 +120,6 @@ namespace RainbowDraw.LOGIC
 
         public static BitmapImage BitmapToBitmpaImage(ref Bitmap fBit)
         {
-            BitmapImage bitmapImage = new BitmapImage();
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 fBit.Save((Stream)memoryStream, ImageFormat.Png);
@@ -254,7 +248,7 @@ namespace RainbowDraw.LOGIC
             return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
-        public static double getAlgleFromPoint(System.Windows.Point pos1, System.Windows.Point pos2)
+        public static double GetAlgleFromPoint(System.Windows.Point pos1, System.Windows.Point pos2)
         {
             double num1;
             if (pos1 == pos2)
@@ -276,7 +270,7 @@ namespace RainbowDraw.LOGIC
             return num1;
         }
 
-        public static System.Windows.Point getPointFromAngle(System.Windows.Point pos1, System.Windows.Point pos2, double Angle)
+        public static System.Windows.Point GetPointFromAngle(System.Windows.Point pos1, System.Windows.Point pos2, double Angle)
         {
             pos2.X -= pos1.X;
             pos2.Y -= pos1.Y;

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -41,27 +37,27 @@ namespace RainbowDraw.LOGIC
             return result;
         }
 
-        public static void RenderToPNGFile(Visual targetControl, string filename)
-        {
-            var renderTargetBitmap = GetRenderTargetBitmapFromControl(targetControl);
+        //public static void RenderToPNGFile(Visual targetControl, string filename)
+        //{
+        //    var renderTargetBitmap = GetRenderTargetBitmapFromControl(targetControl);
 
-            var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+        //    var encoder = new PngBitmapEncoder();
+        //    encoder.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
 
-            var result = new BitmapImage();
+        //    var result = new BitmapImage();
 
-            try
-            {
-                using (var fileStream = new FileStream(filename, FileMode.Create))
-                {
-                    encoder.Save(fileStream);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"There was an error saving the file: {ex.Message}");
-            }
-        }
+        //    try
+        //    {
+        //        using (var fileStream = new FileStream(filename, FileMode.Create))
+        //        {
+        //            encoder.Save(fileStream);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine($"There was an error saving the file: {ex.Message}");
+        //    }
+        //}
 
         private static BitmapSource GetRenderTargetBitmapFromControl(Visual targetControl, double dpi = defaultDpi)
         {
@@ -86,7 +82,7 @@ namespace RainbowDraw.LOGIC
             return renderTargetBitmap;
         }
 
-        public static Bitmap sharpen(Bitmap image)
+        public static Bitmap Sharpen(Bitmap image)
         {
             Bitmap sharpenImage = new Bitmap(image.Width, image.Height);
 

@@ -1,21 +1,11 @@
 ﻿using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RainbowDraw.VIEW
 {
@@ -27,22 +17,19 @@ namespace RainbowDraw.VIEW
         private IntPtr MainHwnd;
         private IntPtr hwndMag;
         private float _Magnification;
-        private bool Initialized;
-        private int screenIndex = 1;
+        private new bool Initialized;
+        private readonly int screenIndex = 1;
         private Rect screenRect;
         private RECT magWindowRect;
         private RECT captureRect;
         private System.Drawing.Size MyFrmSize;
         private int CaptureWidth;
         private int CaptureHeight;
-        private double scrRatio;
         private int MarginW;
         private int MarginH;
         private bool IsZoomStop;
         private bool IsProcessing;
         private const int GWL_EXSTYLE = -20;
-        private const int GWL_WNDPROC = -4;
-        private const int WM_COPYDATA = 74;
 
         public ZoomWindow()
         {
@@ -52,7 +39,7 @@ namespace RainbowDraw.VIEW
             hwndMag = IntPtr.Zero;
             magWindowRect = new RECT();
             captureRect = new RECT(0, 0);
-            scrRatio = 0.15;
+            ScrRatio = 0.15;
             IsZoomStop = false;
             IsProcessing = false;
             MinMagify = 1.2;
@@ -68,16 +55,9 @@ namespace RainbowDraw.VIEW
                 InitMagify = App.Setting.Magify;
                 screenRect = new Rect(new System.Windows.Point((double)Screen.AllScreens[screenIndex].Bounds.Left, (double)Screen.AllScreens[screenIndex].Bounds.Top), new System.Windows.Size((double)Screen.AllScreens[screenIndex].Bounds.Width, (double)Screen.AllScreens[screenIndex].Bounds.Height));
                 BeginMagify();
-                //Common.GetScreenDpi();
-                //Left = Common.ScreenRectInfo[screenIndex].Left;
-                //Top = Common.ScreenRectInfo[screenIndex].Top;
-                //Width = Common.ScreenRectInfo[screenIndex].Width;
-                //Height = Common.ScreenRectInfo[screenIndex].Height;
                 WindowState = WindowState.Maximized;
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
         }
 
         public void Init()
@@ -111,11 +91,12 @@ namespace RainbowDraw.VIEW
                     NativeMethods.MagSetWindowTransform(hwndMag, ref pTransform);
                     SetInitSize();
                 }
-                catch (Exception ex)
-                {
-                }
+                catch { }
             }
         }
+
+        public double ScrRatio { get; }
+
         private void BeginMagify()
         {
             try
@@ -148,17 +129,13 @@ namespace RainbowDraw.VIEW
                         }
                         IsProcessing = false;
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         IsProcessing = false;
                     }
-                    // ISSUE: reference to a compiler-generated method
-                    //System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, (Delegate)new Action(closure750_2._Lambda\u0024__1));
                 });
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
         }
 
         private void SetupMagnifier()
@@ -177,33 +154,6 @@ namespace RainbowDraw.VIEW
                 return;
             Transformation matrix = new Transformation(MagnificationVal);
             NativeMethods.MagSetWindowTransform(hwndMag, ref matrix);
-            //ColorEffect magEffectGrayscale = new ColorEffect();
-            //magEffectGrayscale.transform00 = 0.3f;
-            //magEffectGrayscale.transform01 = 0.3f;
-            //magEffectGrayscale.transform02 = 0.3f;
-            //magEffectGrayscale.transform03 = 0.0f;
-            //magEffectGrayscale.transform04 = 0.0f;
-            //magEffectGrayscale.transform10 = 0.6f;
-            //magEffectGrayscale.transform20 = 0.6f;
-            //magEffectGrayscale.transform30 = 0.6f;
-            //magEffectGrayscale.transform40 = 0.0f;
-            //magEffectGrayscale.transform11 = 0.0f;
-            //magEffectGrayscale.transform12 = 0.1f;
-            //magEffectGrayscale.transform13 = 0.1f;
-            //magEffectGrayscale.transform14 = 0.1f;
-            //magEffectGrayscale.transform21 = 0.0f;
-            //magEffectGrayscale.transform22 = 0.0f;
-            //magEffectGrayscale.transform23 = 0.0f;
-            //magEffectGrayscale.transform24 = 0.0f;
-            //magEffectGrayscale.transform31 = 0.0f;
-            //magEffectGrayscale.transform32 = 1.0f;
-            //magEffectGrayscale.transform33 = 0.0f;
-            //magEffectGrayscale.transform34 = 0.0f;
-            //magEffectGrayscale.transform41 = 0.0f;
-            //magEffectGrayscale.transform42 = 0.0f;
-            //magEffectGrayscale.transform43 = 0.0f;
-            //magEffectGrayscale.transform44 = 1.0f;
-            //NativeMethods.MagSetColorEffect(hwndMag, ref magEffectGrayscale);
         }
 
         private void SetInitSize()
@@ -214,12 +164,10 @@ namespace RainbowDraw.VIEW
                 MyFrmSize = new System.Drawing.Size(checked(magWindowRect.right - magWindowRect.left), checked(magWindowRect.bottom - magWindowRect.top));
                 CaptureWidth = checked((int)Math.Round(unchecked((double)MyFrmSize.Width / (double)MagnificationVal)));
                 CaptureHeight = checked((int)Math.Round(unchecked((double)MyFrmSize.Height / (double)MagnificationVal)));
-                MarginW = checked((int)Math.Round(unchecked((double)CaptureWidth * scrRatio / (double)MagnificationVal)));
-                MarginH = checked((int)Math.Round(unchecked((double)CaptureHeight * scrRatio / (double)MagnificationVal)));
+                MarginW = checked((int)Math.Round(unchecked((double)CaptureWidth * ScrRatio / (double)MagnificationVal)));
+                MarginH = checked((int)Math.Round(unchecked((double)CaptureHeight * ScrRatio / (double)MagnificationVal)));
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
         }
 
         private void ResizeMagnifier()
@@ -240,8 +188,6 @@ namespace RainbowDraw.VIEW
             else
             {
                 POINT pt = new POINT();
-                POINT point = new POINT();
-                RECT rect2 = new RECT();
                 NativeMethods.GetCursorPos(ref pt);
                 POINT rect3 = pt;
                 NativeMethods.ScreenToClient(MainHwnd, ref rect3);
@@ -314,9 +260,9 @@ namespace RainbowDraw.VIEW
             return rect1;
         }
 
-        public void magnify() => MagnificationVal += 0.2f;
+        public void Magnify() => MagnificationVal += 0.2f;
 
-        public void reduce() => MagnificationVal -= 0.2f;
+        public void Reduce() => MagnificationVal -= 0.2f;
 
         public void Exit()
         {
@@ -332,9 +278,7 @@ namespace RainbowDraw.VIEW
                     Thread.Sleep(100);
                 }
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
             Close();
         }
 
@@ -344,9 +288,7 @@ namespace RainbowDraw.VIEW
             {
                 ResizeMagnifier();
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
         }
 
         private void ZoomWindow_Closing(object sender, CancelEventArgs e)

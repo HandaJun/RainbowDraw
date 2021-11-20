@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace RainbowDraw
@@ -22,19 +16,16 @@ namespace RainbowDraw
     /// </summary>
     public partial class SubWindow : Window
     {
-        private KeyboardHook _hook;
         Brush curColor = Brushes.White;
-        int curLineSize = 5;
+        readonly int curLineSize = 5;
         bool rainbowFlg = false;
-        IntPtr handle = new IntPtr(0);
+        private static readonly IntPtr intPtr = new IntPtr(0);
         float rainbowProgress = 0;
-
-        Dictionary<string, Canvas> CanvasDic = new Dictionary<string, Canvas>();
+        readonly Dictionary<string, Canvas> CanvasDic = new Dictionary<string, Canvas>();
         Canvas nowCanvas = null;
-        Stack<string> CanvasIdStack = new Stack<string>();
-        bool IsLoaded = false;
-        DRAW_MODE nowMode = DRAW_MODE.DRAW;
-        DRAW_MODE prevMode = DRAW_MODE.DRAW;
+        readonly Stack<string> CanvasIdStack = new Stack<string>();
+        new bool IsLoaded = false;
+        readonly DRAW_MODE nowMode = DRAW_MODE.DRAW;
 
         Border rectBd = null;
         Line line = null;
@@ -68,7 +59,7 @@ namespace RainbowDraw
                     Thread.Sleep(100);
                 }
             });
-            handle = new WindowInteropHelper(this).Handle;
+            Handle = new WindowInteropHelper(this).Handle;
             IsLoaded = true;
         }
 
@@ -78,9 +69,10 @@ namespace RainbowDraw
             rainbowProgress += ascending;
             if (rainbowProgress > 1f)
             {
-                rainbowProgress = rainbowProgress - 1f;
+                rainbowProgress -= 1f;
             }
-            this.Dispatcher.Invoke(() => {
+            this.Dispatcher.Invoke(() =>
+            {
                 rtn = Rainbow(rainbowProgress);
                 curColor = rtn;
             });
@@ -92,7 +84,7 @@ namespace RainbowDraw
             float div = (Math.Abs(progress % 1) * 6);
             int ascending = (int)((div % 1) * 255);
             int descending = 255 - ascending;
-            Color c = Colors.White;
+            Color c;
             switch ((int)div)
             {
                 case 0:
@@ -117,15 +109,15 @@ namespace RainbowDraw
             return new SolidColorBrush(c);
         }
 
-        private void can_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Can_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (IsLoaded && e.ChangedButton == MouseButton.Left)
             {
-                StartDraw(nowMode);
+                StartDraw();
             }
         }
 
-        public void StartDraw(DRAW_MODE mode)
+        public void StartDraw()
         {
             try
             {
@@ -170,7 +162,7 @@ namespace RainbowDraw
             }
         }
 
-        private void can_MouseMove(object sender, MouseEventArgs e)
+        private void Can_MouseMove(object sender, MouseEventArgs e)
         {
             if (IsLoaded && drawFlg && e.LeftButton == MouseButtonState.Pressed)
             {
@@ -200,7 +192,7 @@ namespace RainbowDraw
             }
         }
 
-        private void can_MouseUp(object sender, MouseButtonEventArgs e)
+        private void Can_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (IsLoaded && drawFlg && e.ChangedButton == MouseButton.Left)
             {
@@ -303,12 +295,14 @@ namespace RainbowDraw
 
         public void CreateAnEllipse(Brush b, Point p)
         {
-            Ellipse el = new Ellipse();
-            el.Height = curLineSize;
-            el.Width = curLineSize;
-            el.StrokeThickness = curLineSize;
-            el.Stroke = b.Clone();
-            el.Fill = b.Clone();
+            Ellipse el = new Ellipse
+            {
+                Height = curLineSize,
+                Width = curLineSize,
+                StrokeThickness = curLineSize,
+                Stroke = b.Clone(),
+                Fill = b.Clone()
+            };
             Canvas.SetLeft(el, p.X);
             Canvas.SetTop(el, p.Y);
             try
@@ -322,18 +316,22 @@ namespace RainbowDraw
 
         public void CreateRect()
         {
-            rectBd = new Border();
-            rectBd.HorizontalAlignment = HorizontalAlignment.Left;
-            rectBd.VerticalAlignment = VerticalAlignment.Top;
-            rectBd.CornerRadius = new CornerRadius(5);
-            rectBd.BorderThickness = new Thickness(curLineSize);
+            rectBd = new Border
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                CornerRadius = new CornerRadius(5),
+                BorderThickness = new Thickness(curLineSize),
+                Width = 0,
+                Height = 0
+            };
             Canvas.SetLeft(rectBd, startX);
             Canvas.SetTop(rectBd, startY);
-            rectBd.Width = 0;
-            rectBd.Height = 0;
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1, 1);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 1)
+            };
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 0));
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 1));
             rectBd.BorderBrush = lg;
@@ -364,23 +362,27 @@ namespace RainbowDraw
 
         public void CreateLine()
         {
-            line = new Line();
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1, 1);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 1)
+            };
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 0));
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 1));
-            line.Stroke = lg;
-            line.X1 = startX;
-            line.Y1 = startY;
-            line.X2 = startX;
-            line.Y2 = startY;
-            line.UseLayoutRounding = true;
-            line.HorizontalAlignment = HorizontalAlignment.Left;
-            line.VerticalAlignment = VerticalAlignment.Top;
-            line.StrokeThickness = curLineSize;
-            line.StrokeStartLineCap = PenLineCap.Round;
-            line.StrokeEndLineCap = PenLineCap.Round;
+            line = new Line
+            {
+                Stroke = lg,
+                X1 = startX,
+                Y1 = startY,
+                X2 = startX,
+                Y2 = startY,
+                UseLayoutRounding = true,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                StrokeThickness = curLineSize,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Round
+            };
             nowCanvas.Children.Add(line);
         }
 
@@ -407,46 +409,58 @@ namespace RainbowDraw
 
         public void CreateArrow()
         {
-            line = new Line();
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1, 1);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 1)
+            };
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 0));
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 1));
-            line.Stroke = lg;
-            line.X1 = startX;
-            line.Y1 = startY;
-            line.X2 = startX;
-            line.Y2 = startY;
-            line.UseLayoutRounding = true;
-            line.HorizontalAlignment = HorizontalAlignment.Left;
-            line.VerticalAlignment = VerticalAlignment.Top;
-            line.StrokeThickness = curLineSize;
-            line.StrokeStartLineCap = PenLineCap.Round;
-            line.StrokeEndLineCap = PenLineCap.Flat;
+            line = new Line
+            {
+                Stroke = lg,
+                X1 = startX,
+                Y1 = startY,
+                X2 = startX,
+                Y2 = startY,
+                UseLayoutRounding = true,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                StrokeThickness = curLineSize,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Flat
+            };
             nowCanvas.Children.Add(line);
 
-            poly = new Polygon();
-            PointCollection pc = new PointCollection();
-            pc.Add(new Point(-1, -1));
-            pc.Add(new Point(25, 10));
-            pc.Add(new Point(10, 25));
-            poly.Points = pc;
-            poly.StrokeLineJoin = PenLineJoin.Round;
-            poly.Stroke = curColor;
-            poly.Fill = curColor;
-            poly.StrokeThickness = 5;
-            poly.Height = 30;
-            poly.Width = 30;
-            poly.RenderTransformOrigin = new Point(0, 0);
+            PointCollection pc = new PointCollection
+            {
+                new Point(-1, -1),
+                new Point(25, 10),
+                new Point(10, 25)
+            };
+            poly = new Polygon
+            {
+                Points = pc,
+                StrokeLineJoin = PenLineJoin.Round,
+                Stroke = curColor,
+                Fill = curColor,
+                StrokeThickness = 5,
+                Height = 30,
+                Width = 30,
+                RenderTransformOrigin = new Point(0, 0)
+            };
             Canvas.SetLeft(poly, startX);
             Canvas.SetTop(poly, startY);
-            RotateTransform rt = new RotateTransform();
-            rt.Angle = 45;
-            ScaleTransform st = new ScaleTransform();
+            RotateTransform rt = new RotateTransform
+            {
+                Angle = 45
+            };
             double arrowScale = 1 + ((curLineSize - 5) * 0.15d);
-            st.ScaleX = arrowScale;
-            st.ScaleY = arrowScale;
+            ScaleTransform st = new ScaleTransform
+            {
+                ScaleX = arrowScale,
+                ScaleY = arrowScale
+            };
             TransformGroup tfg = new TransformGroup();
             tfg.Children.Add(rt);
             tfg.Children.Add(st);
@@ -485,13 +499,13 @@ namespace RainbowDraw
             {
                 if (item is RotateTransform)
                 {
-                    (item as RotateTransform).Angle = getAngle(new Point(startX, startY), p) + 135;
+                    (item as RotateTransform).Angle = GetAngle(new Point(startX, startY), p) + 135;
                 }
             }
 
         }
 
-        public double getAngle(Point start, Point end)
+        public double GetAngle(Point start, Point end)
         {
             double dy = end.Y - start.Y;
             double dx = end.X - start.X;
@@ -501,25 +515,29 @@ namespace RainbowDraw
 
         public void CreateTextbox()
         {
-            textBox = new TextBox();
-            textBox.FontSize = 50;
-            textBox.MinWidth = 30;
-            textBox.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
-            textBox.BorderThickness = new Thickness(2);
-            textBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+            textBox = new TextBox
+            {
+                FontSize = 50,
+                MinWidth = 30,
+                Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0)),
+                BorderThickness = new Thickness(2),
+                BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150)),
+                TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true
+            };
             Canvas.SetLeft(textBox, startX);
             Canvas.SetTop(textBox, startY);
-            textBox.TextWrapping = TextWrapping.Wrap;
-            textBox.AcceptsReturn = true;
             textBox.KeyUp += TextBox_KeyUp;
             TextCompositionManager.AddPreviewTextInputUpdateHandler(textBox, TextBox_PreviewTextInputUpdate);
             TextCompositionManager.AddPreviewTextInputHandler(textBox, TextBox_PreviewTextInput);
             textBox.GotKeyboardFocus += TextBox_GotKeyboardFocus;
             textBox.LostKeyboardFocus += TextBox_LostKeyboardFocus;
 
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.MappingMode = BrushMappingMode.Absolute;
-            lg.EndPoint = new Point(20, 0);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                MappingMode = BrushMappingMode.Absolute,
+                EndPoint = new Point(20, 0)
+            };
             Color c = ((SolidColorBrush)curColor).Color;
             lg.GradientStops.Add(new GradientStop(c, 0));
             lg.GradientStops.Add(new GradientStop(c, 1));
@@ -531,6 +549,9 @@ namespace RainbowDraw
 
 
         private bool isImeOnConv = false;
+
+        public IntPtr Handle { get; set; } = intPtr;
+
         private void TextBox_PreviewTextInputUpdate(object sender, TextCompositionEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -552,10 +573,12 @@ namespace RainbowDraw
                 TextBox tb = sender as TextBox;
                 Color c = (Color)ColorConverter.ConvertFromString(tb.Tag.ToString());
 
-                LinearGradientBrush lg = new LinearGradientBrush();
-                //lg.StartPoint = new Point(0, 0);
-                lg.MappingMode = BrushMappingMode.Absolute;
-                lg.EndPoint = new Point(tb.ActualWidth, tb.ActualHeight);
+                LinearGradientBrush lg = new LinearGradientBrush
+                {
+                    //lg.StartPoint = new Point(0, 0);
+                    MappingMode = BrushMappingMode.Absolute,
+                    EndPoint = new Point(tb.ActualWidth, tb.ActualHeight)
+                };
                 lg.GradientStops.Add(new GradientStop(c, 0));
                 Brush endBrush = Rainbow(rainbowProgress + (float)0.2);
                 Color endColor = ((SolidColorBrush)endBrush).Color;
@@ -571,8 +594,7 @@ namespace RainbowDraw
 
         private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            if (tb != null)
+            if (sender is TextBox tb)
             {
                 tb.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
             }
@@ -580,8 +602,7 @@ namespace RainbowDraw
 
         private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            if (tb != null)
+            if (sender is TextBox tb)
             {
                 tb.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 150, 150, 150));
             }

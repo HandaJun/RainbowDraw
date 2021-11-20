@@ -271,7 +271,7 @@
                              PlacementTarget="{Binding ElementName=ToolsBt}" Placement="MousePoint" HorizontalOffset="3" VerticalOffset="3" PopupAnimation="Slide"
                              x:Name="ToolsPopup">
                         <!--Width="212"-->
-                        <Border x:Name="ToolsMenuBd" Width="62" Height="Auto" BorderThickness="1" BorderBrush="#AAAAAAAA" Background="#CC333333" CornerRadius="0" Padding="5">
+                        <Border x:Name="ToolsMenuBd" Width="112" Height="Auto" BorderThickness="1" BorderBrush="#AAAAAAAA" Background="#CC333333" CornerRadius="0" Padding="5">
                             <WrapPanel x:Name="ToolsMenuPn" Orientation="Horizontal">
                                 <!--<Grid MouseDown="InsertTool_MouseDown" Background="Transparent" Cursor="Hand" Tag="Timer">
                                     <Grid Width="50" Height="50" HorizontalAlignment="Left" Margin="0,0,0,0">
@@ -299,13 +299,13 @@
                                         </Border>
                                     </Grid>
                                 </Grid>-->
-                                <!--<Grid MouseDown="AddTools_MouseDown" Background="Transparent" Cursor="Hand">
+                                <Grid MouseDown="AddTools_MouseDown" Background="Transparent" Cursor="Hand">
                                     <Grid Width="50" Height="50" HorizontalAlignment="Left" Margin="0,0,0,0">
                                         <Border Margin="12" CornerRadius="30" Background="#333">
                                             <fw:ImageAwesome Icon="Plus" Width="20" Height="15" Foreground="White"/>
                                         </Border>
                                     </Grid>
-                                </Grid>-->
+                                </Grid>
                                 <WrapPanel x:Name="AddToolsMenuPn" Orientation="Horizontal">
                                     <!--<Grid Cursor="Hand">
                                         <Grid MouseDown="ColorChange_MouseDown" Width="30" Height="30" HorizontalAlignment="Left" Margin="0,0,0,0" Tag="#FFFFFF00">

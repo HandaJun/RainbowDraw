@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
 namespace RainbowDraw.LOGIC
@@ -11,15 +8,8 @@ namespace RainbowDraw.LOGIC
     [Serializable]
     public class ApplicationSetting
     {
-        public static readonly string Location = "Setting.yaml";
+        public static readonly string Location = "RainbowDrawSetting.yaml";
 
-        //private string removedRowLogFormat = string.Empty;
-        //public string RemovedRowLogFormat
-        //{
-        //    get { return removedRowLogFormat; }
-        //    set { SetProperty(ref removedRowLogFormat, value); }
-        //}
-        
         public string UpdateUrl { get; set; } = "https://samek.tistory.com/8";
         public string HelpUrl { get; set; } = "https://samek.tistory.com/12";
         public int Size { get; set; } = 5;

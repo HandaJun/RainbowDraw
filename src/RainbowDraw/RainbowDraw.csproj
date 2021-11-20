@@ -122,7 +122,6 @@
     <Compile Include="LOGIC\HTMLParser.cs" />
     <Compile Include="LOGIC\MouseHook.cs" />
     <Compile Include="LOGIC\User32Helper.cs" />
-    <Compile Include="MAIN_SUB\HookKey_bk.cs" />
     <Compile Include="MAIN_SUB\MainCommon.cs" />
     <Compile Include="MAIN_SUB\SubTextbox.cs" />
     <Compile Include="MAIN_SUB\SubArrow.cs" />
@@ -271,14 +270,9 @@
     <Content Include="IMG\Draw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="IMG\protrator_b.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="IMG\protrator_b_icon.png" />
     <Content Include="IMG\protrator_b_s.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="IMG\protrator_w.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="IMG\protrator_w_icon.png" />
@@ -291,6 +285,18 @@
     <Content Include="IMG\ToolBoxIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="License\Costura.Fody.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="License\MouseKeyboardActivityMonitor.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="License\Fody.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="License\Dirkster.ColorPickerLib.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="License\Hardcodet.NotifyIcon.Wpf.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

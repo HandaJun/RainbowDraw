@@ -1,13 +1,8 @@
 ﻿using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace RainbowDraw
 {
@@ -20,18 +15,22 @@ namespace RainbowDraw
             {
                 thickness = thickness * 2 + 3;
             }
-            rectBd = new Border();
-            rectBd.HorizontalAlignment = HorizontalAlignment.Left;
-            rectBd.VerticalAlignment = VerticalAlignment.Top;
-            rectBd.CornerRadius = new CornerRadius(5);
+            rectBd = new Border
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                CornerRadius = new CornerRadius(5),
+                Width = 0,
+                Height = 0
+            };
             double minus = thickness / 2;
             Canvas.SetLeft(rectBd, startX - minus);
             Canvas.SetTop(rectBd, startY - minus);
-            rectBd.Width = 0;
-            rectBd.Height = 0;
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1, 1);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 1)
+            };
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 0));
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 1));
             rectBd.BorderBrush = lg;

@@ -1,6 +1,4 @@
-﻿using FontAwesome.WPF;
-using Microsoft.Win32.SafeHandles;
-using MouseKeyboardActivityMonitor;
+﻿using MouseKeyboardActivityMonitor;
 using MouseKeyboardActivityMonitor.WinApi;
 using RainbowDraw.DATA;
 using RainbowDraw.LOGIC;
@@ -8,28 +6,12 @@ using RainbowDraw.VIEW;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Resources;
-using System.Windows.Shapes;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using Color = System.Windows.Media.Color;
-using Pen = System.Windows.Media.Pen;
 using Point = System.Windows.Point;
 
 namespace RainbowDraw
@@ -167,8 +149,10 @@ namespace RainbowDraw
             //_hook.KeyDown += new KeyboardHook.HookEventHandler(OnHookKeyDown);
             //_hook.KeyUp += new KeyboardHook.HookEventHandler(OnHookKeyUp);
 
-            keyboardHookListener = new KeyboardHookListener(new GlobalHooker());
-            keyboardHookListener.Enabled = true;
+            keyboardHookListener = new KeyboardHookListener(new GlobalHooker())
+            {
+                Enabled = true
+            };
             keyboardHookListener.KeyDown += OnHookKeyDown;
             keyboardHookListener.KeyUp += OnHookKeyUp;
 
@@ -188,7 +172,7 @@ namespace RainbowDraw
             new MouseHook();
         }
 
-        private void mainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MainCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (IsLoaded && e.ChangedButton == MouseButton.Left && !textMoveFlg)
             {
@@ -204,7 +188,7 @@ namespace RainbowDraw
                     ToolBar.SetTopMost();
                     return;
                 }
-                StartDraw(Common.nowMode);
+                StartDraw();
             }
             if (IsLoaded && e.ChangedButton == MouseButton.Right && !textMoveFlg)
             {
@@ -213,7 +197,7 @@ namespace RainbowDraw
             }
         }
 
-        public void StartDraw(DRAW_MODE mode)
+        public void StartDraw()
         {
             try
             {
@@ -248,8 +232,6 @@ namespace RainbowDraw
                     case DRAW_MODE.DRAW:
                     case DRAW_MODE.HIGHLIGHTER_DRAW:
                         Common.rainbowFlg = true;
-                        elliNum = 1;
-                        elliList = new Dictionary<string, List<Point>>();
                         InsertElli(startPosition, curColor.Clone());
                         break;
                     case DRAW_MODE.RECTANGLE:
@@ -300,7 +282,7 @@ namespace RainbowDraw
             }
         }
 
-        private void mainCanvas_MouseMove(object sender, MouseEventArgs e)
+        private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             //EmphasizeWindow.Move();
             if (IsLoaded && Common.drawFlg && e.LeftButton == MouseButtonState.Pressed && !textMoveFlg)
@@ -312,7 +294,6 @@ namespace RainbowDraw
                 {
                     case DRAW_MODE.DRAW:
                     case DRAW_MODE.HIGHLIGHTER_DRAW:
-                        ++elliNum;
                         InsertElli(curPoint, curColor.Clone());
                         break;
                     case DRAW_MODE.RECTANGLE:
@@ -346,7 +327,7 @@ namespace RainbowDraw
             }
         }
 
-        private void mainCanvas_MouseUp(object sender, MouseButtonEventArgs e)
+        private void MainCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (IsLoaded && Common.drawFlg && e.ChangedButton == MouseButton.Left && !textMoveFlg)
             {
@@ -355,18 +336,6 @@ namespace RainbowDraw
                     case DRAW_MODE.DRAW:
                     case DRAW_MODE.HIGHLIGHTER_DRAW:
                         Common.rainbowFlg = false;
-                        //Image img = new Image();
-                        //Image img3 = new Image();
-                        //img.Source = RenderVisualService.RenderToPNGImageSource(nowCanvas);
-                        //img3.Source = RenderVisualService.RenderToPNGImageSource(nowCanvas);
-                        //Canvas.SetLeft(img, EllipseMinLeft);
-                        //Canvas.SetTop(img, EllipseMinTop);
-                        //Canvas.SetLeft(img3, EllipseMinLeft);
-                        //Canvas.SetTop(img3, EllipseMinTop);
-                        //nowCanvas.Children.Clear();
-                        //nowCanvas.Children.Add(img);
-                        //nowCanvas.Children.Add(img3);
-                        //nowCanvas.BeginAnimation(OpacityProperty, AnimationManager.DoubleAni(1, 0, 2));
                         break;
                     case DRAW_MODE.RECTANGLE:
                     case DRAW_MODE.DRAW_RECTANGLE:
@@ -401,8 +370,10 @@ namespace RainbowDraw
                     case DRAW_MODE.HIGHLIGHTER:
                     case DRAW_MODE.DRAW_HIGHLIGHTER:
                         Common.rainbowFlg = false;
-                        Image img2 = new Image();
-                        img2.Source = RenderVisualService.RenderToPNGImageSource(nowCanvas);
+                        Image img2 = new Image
+                        {
+                            Source = RenderVisualService.RenderToPNGImageSource(nowCanvas)
+                        };
                         Canvas.SetLeft(img2, EllipseMinLeft);
                         Canvas.SetTop(img2, EllipseMinTop);
                         nowCanvas.Children.Clear();
@@ -420,12 +391,6 @@ namespace RainbowDraw
                     {
                         Common.CanvasDic[nowCanvas.Tag.ToString()].RemainStartFlg = true;
                     }
-                    //ItemData item = new ItemData()
-                    //{
-                    //    ID = nowCanvas.Tag.ToString(),
-                    //    RemainMs = App.Setting.RemainMs
-                    //};
-                    //Common.CanvasDic.TryAdd(nowCanvas.Tag.ToString(), item);
                 }
                 Common.drawFlg = false;
                 mainCanvas.InvalidateVisual();
@@ -444,8 +409,6 @@ namespace RainbowDraw
         {
             Application.Current.Shutdown();
         }
-
-
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -481,7 +444,7 @@ namespace RainbowDraw
 
         }
 
-        private void mainCanvas_KeyDown(object sender, KeyEventArgs e)
+        private void MainCanvas_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Tab)
             {
@@ -496,17 +459,6 @@ namespace RainbowDraw
                     return;
                 }
             }
-
-            //if (Keyboard.Modifiers == ModifierKeys.Shift)
-            //{
-            //    if (Common.nowMode == DRAW_MODE.LINE)
-            //    {
-            //        Debug.WriteLine("mainCanvas_KeyDown 45");
-            //        MainWindow.SetLineRad(45);
-            //        return;
-            //    }
-            //}
-
         }
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
@@ -521,7 +473,7 @@ namespace RainbowDraw
             //}
         }
 
-        private void mainCanvas_KeyUp(object sender, KeyEventArgs e)
+        private void MainCanvas_KeyUp(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Alt)
             {

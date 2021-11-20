@@ -1,9 +1,5 @@
 ﻿using RainbowDraw.LOGIC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,46 +16,59 @@ namespace RainbowDraw
             {
                 thickness = thickness * 2 + 3;
             }
-            line = new Line();
-            LinearGradientBrush lg = new LinearGradientBrush();
-            lg.StartPoint = new Point(0, 0);
-            lg.EndPoint = new Point(1, 1);
+            LinearGradientBrush lg = new LinearGradientBrush
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 1)
+            };
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 0));
             lg.GradientStops.Add(new GradientStop(((SolidColorBrush)curColor).Color, 1));
-            line.Stroke = lg;
-            line.X1 = startX;
-            line.Y1 = startY;
-            line.X2 = startX;
-            line.Y2 = startY;
-            line.UseLayoutRounding = true;
-            line.HorizontalAlignment = HorizontalAlignment.Left;
-            line.VerticalAlignment = VerticalAlignment.Top;
-            line.StrokeThickness = thickness;
-            line.StrokeStartLineCap = PenLineCap.Round;
-            line.StrokeEndLineCap = PenLineCap.Flat;
+            line = new Line
+            {
+                Stroke = lg,
+                X1 = startX,
+                Y1 = startY,
+                X2 = startX,
+                Y2 = startY,
+                UseLayoutRounding = true,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                StrokeThickness = thickness,
+                StrokeStartLineCap = PenLineCap.Round,
+                StrokeEndLineCap = PenLineCap.Flat
+            };
             nowCanvas.Children.Add(line);
 
-            poly = new Polygon();
-            PointCollection pc = new PointCollection();
-            pc.Add(new Point(-1, -1));
-            pc.Add(new Point(25, 10));
-            pc.Add(new Point(10, 25));
-            poly.Points = pc;
-            poly.StrokeLineJoin = PenLineJoin.Round;
-            poly.Stroke = curColor;
-            poly.Fill = curColor;
-            poly.StrokeThickness = 5;
-            poly.Height = 30;
-            poly.Width = 30;
-            poly.RenderTransformOrigin = new Point(0, 0);
+            PointCollection pc = new PointCollection
+            {
+                new Point(-1, -1),
+                new Point(25, 10),
+                new Point(10, 25)
+            };
+            poly = new Polygon
+            {
+                Points = pc,
+                StrokeLineJoin = PenLineJoin.Round,
+                Stroke = curColor,
+                Fill = curColor,
+                StrokeThickness = 5,
+                Height = 30,
+                Width = 30,
+                RenderTransformOrigin = new Point(0, 0)
+            };
             Canvas.SetLeft(poly, startX);
             Canvas.SetTop(poly, startY);
-            RotateTransform rt = new RotateTransform();
-            rt.Angle = 45;
-            ScaleTransform st = new ScaleTransform();
+
+            RotateTransform rt = new RotateTransform
+            {
+                Angle = 45
+            };
             double arrowScale = 1 + ((thickness - 5) * 0.15d);
-            st.ScaleX = arrowScale;
-            st.ScaleY = arrowScale;
+            ScaleTransform st = new ScaleTransform
+            {
+                ScaleX = arrowScale,
+                ScaleY = arrowScale
+            };
             TransformGroup tfg = new TransformGroup();
             tfg.Children.Add(rt);
             tfg.Children.Add(st);
@@ -98,13 +107,13 @@ namespace RainbowDraw
             {
                 if (item is RotateTransform)
                 {
-                    (item as RotateTransform).Angle = getAngle(new Point(startX, startY), p) + 135;
+                    (item as RotateTransform).Angle = GetAngle(new Point(startX, startY), p) + 135;
                 }
             }
 
         }
 
-        public double getAngle(Point start, Point end)
+        public double GetAngle(Point start, Point end)
         {
             double dy = end.Y - start.Y;
             double dx = end.X - start.X;
