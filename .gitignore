@@ -1,2 +1,5 @@
 
+src/.vs
+src/RainbowDraw/obj/
+src/RainbowDraw/bin/
 .DS_Store
