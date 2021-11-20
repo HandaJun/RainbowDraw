@@ -1,6 +1,9 @@
 # RainbowDraw
 
 ## 画面の上に落書きするアプリです。
+
+### [Releases](https://github.com/HandaJun/RainbowDraw/releases)
+
 ### 特徴
 * 色が少しつづ変わっていくのが可愛いです。
 * 描いている時にも後ろの背景が変わります。（動画など再生中でも使用可能） 
